@@ -1105,7 +1105,7 @@ body.dark-mode #pwScreen #authTabSignup { color: inherit; }
 <!-- FULLSCREEN MAP OVERLAY -->
 <div id="mapFullOverlay" style="position:fixed;inset:0;z-index:9000;display:none;opacity:0;transition:opacity 0.3s ease">
   <div id="mapFull" style="width:100%;height:100%"></div>
-  <button onclick="collapseMap()" style="position:absolute;bottom:max(20px,calc(env(safe-area-inset-bottom)+16px));left:16px;z-index:9001;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);border-radius:var(--r-pill);padding:8px 16px;font-family:var(--font-mono);font-size:0.68rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
+  <button onclick="collapseMap()" style="position:absolute;top:max(20px,env(safe-area-inset-top));right:16px;z-index:9002;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.95);border-radius:var(--r-pill);padding:8px 16px;font-family:var(--font-mono);font-size:0.68rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.12)">
     <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/></svg>
     Close Map
   </button>
@@ -3021,6 +3021,8 @@ function switchScreen(screen, _skipProfileLoad){
   if(screen==='profile') setTimeout(updateThemeIcon, 0);
   // Fix: Leaflet caches container dimensions when hidden — must invalidate on return
   if(screen==='mylog') setTimeout(function(){if(typeof map !== 'undefined') map.invalidateSize();}, 80);
+  var _fab=document.getElementById('addFlightBtn');
+  if(_fab) _fab.style.display=(screen==='mylog')?'flex':'none';
   if(screen==='settings'){
     // Sync all setting toggles
     setTimeout(function(){
@@ -3336,7 +3338,7 @@ async function openComments(flightId){
   document.getElementById('commentsList').innerHTML=planeLoaderHTML(true);
 
   var res=await sb.from('flight_comments')
-    .select('*, profiles!flight_comments_user_id_fkey(display_name,username,avatar_color)')
+    .select('id,user_id,content,created_at')
     .eq('flight_id',flightId)
     .order('created_at',{ascending:true});
 
@@ -3345,18 +3347,21 @@ async function openComments(flightId){
     list.innerHTML='<div style="padding:20px;text-align:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim)">No comments yet. Be the first!</div>';
     return;
   }
+  var cmUids=[...new Set(res.data.map(function(x){return x.user_id;}))];
+  sb.from('profiles').select('id,display_name,username,avatar_color').in('id',cmUids).then(function(cmPr){
+  var cmPm={};(cmPr.data||[]).forEach(function(p){cmPm[p.id]=p;});
   list.innerHTML=res.data.map(function(c){
-    var p=c.profiles||{};
+    var p=cmPm[c.user_id]||{};
     var name=p.display_name||'User';
     var color=p.avatar_color||'#ff6b6b';
     return '<div class="comment-item">'+
       '<div class="comment-avatar" style="background:'+color+'">'+name.charAt(0).toUpperCase()+'</div>'+
       '<div class="comment-bubble">'+
         '<div class="comment-name">@'+(p.username||'user')+'</div>'+
-        '<div class="comment-text">'+c.content+'</div>'+
+        '<div class="comment-text">'+(c.content||'')+'</div>'+
       '</div>'+
     '</div>';
-  }).join('');
+  }).join('');});
 }
 
 function closeComments(){
