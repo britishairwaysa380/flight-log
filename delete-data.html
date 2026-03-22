@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Your Data — FlightDeck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --coral: #ff6b6b;
+      --violet: #c44dff;
+      --bg: #fff5f0;
+      --glass: rgba(255,255,255,0.6);
+      --border: rgba(255,107,107,0.15);
+      --text: #2d1f1f;
+      --muted: #7a6060;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px 80px;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(255,107,107,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(196,77,255,0.10) 0%, transparent 60%);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--coral), var(--violet));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--coral), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(255,107,107,0.08);
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--coral), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--coral);
+      margin-bottom: 16px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 14px;
+      border: 1px solid rgba(255,107,107,0.1);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--coral), var(--violet));
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      padding-top: 4px;
+    }
+
+    .step-text strong {
+      font-weight: 600;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+
+    .what-gets-deleted {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .data-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .data-item::before {
+      content: '✓';
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      background: rgba(255,107,107,0.1);
+      color: var(--coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .contact-box {
+      background: rgba(196,77,255,0.06);
+      border: 1px solid rgba(196,77,255,0.15);
+      border-radius: 14px;
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .contact-box a {
+      color: var(--violet);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-box a:hover {
+      text-decoration: underline;
+    }
+
+    .warning {
+      background: rgba(255,107,107,0.06);
+      border: 1px solid rgba(255,107,107,0.2);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 20px;
+    }
+
+    .warning strong {
+      color: var(--coral);
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">
+    <div class="logo-icon">✈️</div>
+    <span class="logo-text">FlightDeck</span>
+  </div>
+
+  <div class="card">
+    <h1>Delete Your Data</h1>
+    <p class="subtitle">You can delete your FlightDeck account and all associated data at any time, directly from the app — no email required.</p>
+
+    <div class="section">
+      <div class="section-title">How to delete your account</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Open the <strong>FlightDeck</strong> app and make sure you're signed in.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Tap your <strong>Profile</strong> tab at the bottom of the screen.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Tap the <strong>Settings</strong> icon (⚙️) in the top right corner.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Scroll down and tap <strong>Delete Account</strong>.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">Confirm the deletion when prompted. Your account and all data will be permanently removed.</div>
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ This action is permanent.</strong> Once deleted, your account, flights, photos, and all personal data cannot be recovered.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-title">What gets deleted</div>
+      <div class="what-gets-deleted">
+        <div class="data-item">Your account and profile information</div>
+        <div class="data-item">All flight logs and records</div>
+        <div class="data-item">Photos and captions you've uploaded</div>
+        <div class="data-item">Comments, likes, and social activity</div>
+        <div class="data-item">Followers and following relationships</div>
+        <div class="data-item">Notifications and account history</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-title">Need help?</div>
+      <div class="contact-box">
+        If you're unable to access the app or need assistance deleting your account, please contact us at <a href="mailto:jacob.c.edwin@gmail.com">jacob.c.edwin@gmail.com</a> and we'll process your request within 30 days.
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
